@@ -1,0 +1,51 @@
+# q15 — The AI Agent That Remembers
+
+A ~5 minute documentary video about [q15](https://github.com/q15co/q15), the open-source AI agent runtime with durable memory, produced in the style of [Two Minute Papers](https://www.youtube.com/@TwoMinutePapers).
+
+## Watch
+
+The video is included as `q15-video.mp4` in this repo (38.4 MB, 1920x1080, 5:09).
+
+## What It Covers
+
+- The amnesia problem: most AI assistants forget everything between conversations
+- q15's five-layer memory architecture (core, working, semantic, history, zettelkasten)
+- Skills as composable markdown files
+- Subagent delegation with per-task model routing
+- Multi-provider design (local Ollama, cloud providers, your choice)
+- The shift from disposable AI chats to an accumulative agent
+- Honest limitations: it's infrastructure, not intelligence, and it's early
+- Open source as a power-distribution decision
+
+## How It Was Made
+
+| Component | Tool | Cost |
+|-----------|------|------|
+| Script | Written in Two Minute Papers style (analogy-first, honest about limitations) | - |
+| Narration TTS | Kokoro-82M (local, `bm_fable` voice, speed 0.97) | $0 |
+| Images (14) | fal.ai flux/schnell, landscape 16:9 | ~$0.02 |
+| Ken Burns + assembly | ffmpeg zoompan, xfade crossfades, two-pass EBU R128 loudnorm | - |
+| Compression | libx264 CRF 27, preset slow | - |
+
+### Reproduce
+
+```bash
+# 1. Generate TTS from script
+nix-shell -p python3 ffmpeg --run "python3 generate_tts.py"
+
+# 2. Build the video (requires 14 images in img/ — generate with fal.ai flux/schnell)
+nix-shell -p python3 ffmpeg --run "python3 build_video.py"
+```
+
+See `script.md` for the full narration text and `build_video.py` / `generate_tts.py` for the production pipeline.
+
+## Credits
+
+- Presentation style inspired by [Two Minute Papers](https://www.youtube.com/@TwoMinutePapers) by Dr. Károly Zsolnai Féhér
+- Subject: [q15](https://github.com/q15co/q15) by Adriaan van der Bergh
+- Voice: Kokoro-82M (`bm_fable`)
+- Images: fal.ai flux/schnell
+
+## License
+
+MIT
