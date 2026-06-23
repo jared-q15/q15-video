@@ -9,33 +9,38 @@
 html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0a0e1a; }
 body { font-family: "Helvetica Neue", Arial, sans-serif; }
 
-.bg {
+.bg-image {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(160deg, #0f172a 0%, #1e1b4b 100%);
+  object-fit: cover; opacity: 0; z-index: 0;
+}
+
+.bg-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(160deg, rgba(15,23,42,0.8) 0%, rgba(30,27,75,0.85) 100%);
 }
 
 .label {
   position: absolute; top: 80px; left: 80px;
   font-size: 18px; font-weight: 600; color: #4a9eff;
-  letter-spacing: 4px; text-transform: uppercase; opacity: 0.6;
+  letter-spacing: 4px; text-transform: uppercase; opacity: 0.6; z-index: 10;
 }
 
 .chart-title {
   position: absolute; top: 120px; left: 50%; transform: translateX(-50%);
   font-size: 42px; font-weight: 700; color: #e8eef5; text-align: center;
-  opacity: 0;
+  opacity: 0; z-index: 10;
 }
 
 .chart-subtitle {
   position: absolute; top: 185px; left: 50%; transform: translateX(-50%);
-  font-size: 22px; font-weight: 400; color: #7a8ba0; opacity: 0;
+  font-size: 22px; font-weight: 400; color: #7a8ba0; opacity: 0; z-index: 10;
 }
 
 .chart-container {
   position: absolute; top: 280px; left: 50%; transform: translateX(-50%);
   width: 1200px; height: 600px;
   display: flex; align-items: flex-end; justify-content: space-around;
-  padding: 0 40px 60px 40px;
+  padding: 0 40px 60px 40px; z-index: 10;
 }
 
 .bar-group {
@@ -66,20 +71,22 @@ body { font-family: "Helvetica Neue", Arial, sans-serif; }
 .total {
   position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
   font-size: 24px; font-weight: 400; color: #4a9eff; font-family: "Courier New", monospace;
-  opacity: 0;
+  opacity: 0; z-index: 10;
 }
 </style>
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
 
-  <div class="bg clip" data-start="0" data-duration="6" data-track-index="0"></div>
-  <div class="label clip" data-start="0" data-duration="6" data-track-index="1">04 — Data Visualization</div>
+  <img src="bg.jpg" class="bg-image clip" data-start="0" data-duration="6" data-track-index="0" id="bgImg" />
+  <div class="bg-overlay clip" data-start="0" data-duration="6" data-track-index="1"></div>
 
-  <div class="chart-title clip" data-start="0.3" data-duration="5.5" data-track-index="2" id="title">Animation Techniques by Impact</div>
-  <div class="chart-subtitle clip" data-start="0.6" data-duration="5" data-track-index="2" id="subtitle">Render time per segment (seconds, lower is better)</div>
+  <div class="label clip" data-start="0" data-duration="6" data-track-index="2">04 — Data Visualization</div>
 
-  <div class="chart-container clip" data-start="0.5" data-duration="5.5" data-track-index="3">
+  <div class="chart-title clip" data-start="0.3" data-duration="5.5" data-track-index="3" id="title">Animation Techniques by Impact</div>
+  <div class="chart-subtitle clip" data-start="0.6" data-duration="5" data-track-index="3" id="subtitle">Render time per segment (seconds, lower is better)</div>
+
+  <div class="chart-container clip" data-start="0.5" data-duration="5.5" data-track-index="4">
     <div class="bar-group">
       <div class="bar-val" id="v1">3.2s</div>
       <div class="bar b1" id="bar1"></div>
@@ -107,13 +114,14 @@ body { font-family: "Helvetica Neue", Arial, sans-serif; }
     </div>
   </div>
 
-  <div class="total clip" data-start="4" data-duration="1.8" data-track-index="4" id="total">Total: 19.7s render → 34s video</div>
+  <div class="total clip" data-start="4" data-duration="1.8" data-track-index="5" id="total">Total: 19.7s render → 34s video</div>
 
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
-tl.to("#title", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.3)
+tl.to("#bgImg", { opacity: 0.3, scale: 1.05, duration: 2, ease: "power2.out" }, 0)
+  .to("#title", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.3)
   .to("#subtitle", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.6)
   .to("#bar1", { height: 320, duration: 0.8, ease: "power3.out" }, 1.0)
   .to("#v1", { opacity: 1, duration: 0.3 }, 1.5)
@@ -125,8 +133,9 @@ tl.to("#title", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.3)
   .to("#v4", { opacity: 1, duration: 0.3 }, 2.1)
   .to("#bar5", { height: 370, duration: 0.8, ease: "power3.out" }, 1.8)
   .to("#v5", { opacity: 1, duration: 0.3 }, 2.3)
+  .to("#bgImg", { scale: 1.12, duration: 4, ease: "power1.inOut" }, 1)
   .to("#total", { opacity: 1, duration: 0.5, ease: "power2.out" }, 4.0)
-  .to(".chart-title, .chart-subtitle, .chart-container, .total, .label", { opacity: 0, duration: 0.4 }, 5.5);
+  .to(".chart-title, .chart-subtitle, .chart-container, .total, .label, .bg-overlay, #bgImg", { opacity: 0, duration: 0.4 }, 5.5);
 window.__timelines["main"] = tl;
 </script>
 </body>

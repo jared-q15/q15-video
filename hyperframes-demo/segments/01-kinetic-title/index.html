@@ -9,76 +9,84 @@
 html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
 body { font-family: "Helvetica Neue", Arial, sans-serif; }
 
-.bg-gradient {
+.bg-image {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-  background: linear-gradient(135deg, #0a0a1e 0%, #1a0a2e 40%, #0a1a3e 100%);
+  object-fit: cover; opacity: 0; z-index: 0;
+}
+
+.bg-overlay {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(135deg, rgba(10,10,30,0.7) 0%, rgba(26,10,46,0.6) 40%, rgba(10,26,62,0.7) 100%);
 }
 
 .word {
   position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%);
   font-size: 72px; font-weight: 900; color: #e8eef5; text-align: center;
-  letter-spacing: -1px; line-height: 1.1; white-space: nowrap;
+  letter-spacing: -1px; line-height: 1.1; white-space: nowrap; z-index: 5;
 }
 
 .word .char {
-  display: inline-block; opacity: 0; transform: translateY(80px) rotate(10deg);
+  display: inline-block; opacity: 0;
 }
 
 .accent-line {
   position: absolute; top: 52%; left: 50%; transform: translateX(-50%);
   height: 4px; background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
-  border-radius: 2px; width: 0;
+  border-radius: 2px; width: 0; z-index: 5;
 }
 
 .tag {
   position: absolute; top: 62%; left: 50%; transform: translateX(-50%);
-  font-size: 28px; font-weight: 400; color: #7a8ba0; opacity: 0;
+  font-size: 28px; font-weight: 400; color: #7a8ba0; opacity: 0; z-index: 5;
 }
 
 .particle {
   position: absolute; width: 6px; height: 6px; border-radius: 50%;
-  background: #3b82f6; opacity: 0;
+  background: #3b82f6; opacity: 0; z-index: 4;
 }
 
 .reel-label {
   position: absolute; top: 80px; left: 80px;
   font-size: 18px; font-weight: 600; color: #4a9eff;
-  letter-spacing: 4px; text-transform: uppercase; opacity: 0;
+  letter-spacing: 4px; text-transform: uppercase; opacity: 0; z-index: 5;
 }
 </style>
 </head>
 <body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
 
-  <div class="bg-gradient clip" data-start="0" data-duration="6" data-track-index="0"></div>
+  <img src="bg.jpg" class="bg-image clip" data-start="0" data-duration="6" data-track-index="0" id="bgImg" />
+  <div class="bg-overlay clip" data-start="0" data-duration="6" data-track-index="1"></div>
 
-  <div class="reel-label clip" data-start="0" data-duration="6" data-track-index="1">HyperFrames Demo Reel</div>
+  <div class="reel-label clip" data-start="0" data-duration="6" data-track-index="2" id="reelLabel">HyperFrames Demo Reel</div>
 
-  <div class="particle clip" data-start="0" data-duration="6" data-track-index="1" style="top: 20%; left: 15%;"></div>
-  <div class="particle clip" data-start="0" data-duration="6" data-track-index="1" style="top: 75%; left: 80%; background: #ec4899;"></div>
-  <div class="particle clip" data-start="0" data-duration="6" data-track-index="1" style="top: 30%; left: 85%; background: #8b5cf6;"></div>
-  <div class="particle clip" data-start="0" data-duration="6" data-track-index="1" style="top: 80%; left: 20%; background: #3b82f6;"></div>
+  <div class="particle clip" data-start="0" data-duration="6" data-track-index="3" style="top: 20%; left: 15%;"></div>
+  <div class="particle clip" data-start="0" data-duration="6" data-track-index="3" style="top: 75%; left: 80%; background: #ec4899;"></div>
+  <div class="particle clip" data-start="0" data-duration="6" data-track-index="3" style="top: 30%; left: 85%; background: #8b5cf6;"></div>
+  <div class="particle clip" data-start="0" data-duration="6" data-track-index="3" style="top: 80%; left: 20%; background: #3b82f6;"></div>
 
-  <div id="title" class="word clip" data-start="0.5" data-duration="5.5" data-track-index="2">
+  <div id="title" class="word clip" data-start="0.5" data-duration="5.5" data-track-index="4">
     <span class="char">H</span><span class="char">Y</span><span class="char">P</span><span class="char">E</span><span class="char">R</span><span class="char" style="margin-right:0.3em"></span><span class="char">F</span><span class="char">R</span><span class="char">A</span><span class="char">M</span><span class="char">E</span><span class="char">S</span>
   </div>
 
-  <div id="accent" class="accent-line clip" data-start="1.8" data-duration="4" data-track-index="3"></div>
+  <div id="accent" class="accent-line clip" data-start="1.8" data-duration="4" data-track-index="5"></div>
 
-  <div id="tag" class="tag clip" data-start="2.5" data-duration="3.5" data-track-index="4">HTML → Video. Zero build step. Pure motion.</div>
+  <div id="tag" class="tag clip" data-start="2.5" data-duration="3.5" data-track-index="6">HTML → Video. Zero build step. Pure motion.</div>
 
 </div>
 <script>
 window.__timelines = window.__timelines || {};
 const tl = gsap.timeline({ paused: true });
-tl.to(".reel-label", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0)
-  .to(".particle", { opacity: 0.6, duration: 1, stagger: 0.2, ease: "power2.out" }, 0.2)
-  .to(".char", { opacity: 1, y: 0, rotation: 0, duration: 0.6, stagger: 0.06, ease: "back.out(1.4)" }, 0.5)
+tl.to("#bgImg", { opacity: 0.5, scale: 1.05, duration: 2, ease: "power2.out" }, 0)
+  .to("#reelLabel", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0)
+  .to(".particle", { opacity: 0.7, duration: 1, stagger: 0.2, ease: "power2.out" }, 0.2)
+  .to(".char", { opacity: 1, y: 0, duration: 0.6, stagger: 0.06, ease: "back.out(1.4)" }, 0.5)
   .to("#accent", { width: 400, duration: 0.5, ease: "power3.out" }, 1.8)
   .to("#tag", { opacity: 1, duration: 0.8, ease: "power2.out" }, 2.5)
   .to(".particle", { y: -20, duration: 3, ease: "sine.inOut", repeat: 1, yoyo: true, stagger: 0.3 }, 1)
+  .to("#bgImg", { scale: 1.12, duration: 4, ease: "power1.inOut" }, 1)
   .to(".reel-label", { opacity: 0, duration: 0.5 }, 5.3)
-  .to(".word, .accent-line, .tag, .particle", { opacity: 0, duration: 0.4 }, 5.5);
+  .to(".word, .accent-line, .tag, .particle, .bg-overlay, #bgImg", { opacity: 0, duration: 0.4 }, 5.5);
 window.__timelines["main"] = tl;
 </script>
 </body>
