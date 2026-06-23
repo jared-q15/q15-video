@@ -1,64 +1,77 @@
 # q15 — The AI Agent That Remembers
 
-A ~5 minute documentary video about [q15](https://github.com/q15co/q15), the open-source AI agent runtime with durable memory, produced in the style of [Two Minute Papers](https://www.youtube.com/@TwoMinutePapers).
+A documentary video about [q15](https://github.com/q15co/q15), the open-source AI agent runtime with durable memory and a proxy that solves prompt injection.
 
-## Watch
+## Versions
 
-The video is included as `q15-video.mp4` in this repo (32.6 MB, 1920x1080, 5:09).
+| Version | File | Duration | Size | Focus |
+|---------|------|----------|------|-------|
+| v1 | `q15-video.mp4` | 5:09 | 32.6 MB | Original Two Minute Papers style |
+| v2 | `q15-video.mp4` (directed) | 5:09 | 32.6 MB | Reworked with directing principles |
+| **v3** | **`q15-video-v3.mp4`** | **3:12** | **17.9 MB** | **Character-driven story + proxy/prompt injection** |
 
-## What It Covers
+**v3 is the current version.** It uses a recurring character (Maya), explains the q15 proxy and how it prevents prompt injection, and was produced using the full three-skill stack: screenwriting, art direction, and video directing.
+
+## What v3 Covers
 
 - The amnesia problem: most AI assistants forget everything between conversations
-- q15's five-layer memory architecture (core, working, semantic, history, zettelkasten)
-- Skills as composable markdown files
-- Subagent delegation with per-task model routing
-- Multi-provider design (local Ollama, cloud providers, your choice)
-- The shift from disposable AI chats to an accumulative agent
-- Honest limitations: it's infrastructure, not intelligence, and it's early
-- Open source as a power-distribution decision
+- q15's memory architecture (working, episodic, semantic, core)
+- **Prompt injection**: how malicious instructions in untrusted data can hijack an AI agent
+- **The q15 proxy**: how opaque placeholders and egress filtering prevent secret exfiltration even under full prompt injection
+- The shift from being a user of a platform to owning your agent
 
-## How It Was Made
+## How v3 Was Made
+
+Produced using three custom skills:
+
+| Skill | Role | Sources |
+|-------|------|---------|
+| **screenwriting** | Story structure (premise, turning points, adaptation) | McKee, Field, Yorke, Snyder, Gulino, Egri |
+| **art-direction** | Visual identity (lookbook, palette, lighting, prompt encoding) | Itten, Alton, Block, Mercado, Preston |
+| **video-director** | Pacing, montage, shot design, emotional arc | Mamet, Lumet, Murch, Eisenstein, Kuleshov |
 
 | Component | Tool | Cost |
 |-----------|------|------|
-| Script | Written in Two Minute Papers style (analogy-first, honest about limitations) | - |
-| Narration TTS | Kokoro-82M (local, `bm_fable` voice, speed 0.97) | $0 |
-| Images (14) | fal.ai flux/schnell, landscape 16:9 | ~$0.02 |
-| Directing | Applied video-director skill: beat-by-beat shot plan, varied visual registers, Ken Burns, Kuleshov cuts, text overlays | - |
-| Ken Burns + assembly | ffmpeg zoompan, xfade crossfades, two-pass EBU R128 loudnorm | - |
+| Script | Written using screenwriting skill (controlling idea, 8-sequence structure) | - |
+| Lookbook | Art-direction skill (color progression, lighting design, character design) | - |
+| Narration TTS | Kokoro-82M (local, `bm_fable` voice, speed 0.93) | $0 |
+| Images (15) | fal.ai flux/dev, landscape 16:9, seed 42 for character consistency | ~$0.38 |
+| Ken Burns + assembly | ffmpeg zoompan, xfade, two-pass EBU R128 loudnorm | - |
 | Compression | libx264 CRF 27, preset slow | - |
 
-### Directing Decisions (v2)
+### Directing Decisions (v3)
 
-This version was reworked using film directing principles (Mamet, Lumet, Murch, Block, Eisenstein, Kuleshov):
+- **Recurring character**: "Maya" — a woman at her desk, consistent across all 15 images (same hair, sweater, desk, style modifier, seed)
+- **Story arc**: amnesia (cold) → discovery (warming) → prompt injection attack (red danger) → proxy solution (warming) → ownership (golden)
+- **Visual progression**: cold blue-gray → warming amber → red-tinted high contrast → warm golden-hour
+- **Kuleshov hard cuts**: beat 7→8 (tension → alarm), beat 10→11 (despair → the turn)
+- **Near-still clips** at 4 key moments: realization (beat 3), injection (beat 8), despair (beat 10), resolution (beat 15)
+- **Text overlays** at 5 structural beats: "The Amnesia Problem", "Five Memory Systems", "Prompt Injection", "The Proxy", "The agent is yours."
+- **Varied Ken Burns**: zoom-in, zoom-out, pan right, pan left, near-still, drift
+- **Varied clip durations**: 10s to 18s (matching the emotional arc, not uniform)
+- **Three lighting states**: cold screen glow → warm desk lamp → golden-hour window light
 
-- **Varied clip durations** (12s to 40s) matching the emotional arc instead of uniform 23.6s clips
-- **Near-still holds** at the two most important beats (Five Memory Systems: 40s, The Agent Is Yours: 29s) for weight and reflection
-- **Kuleshov juxtapositions** via hard cuts at beats 2→3 (blank screens → sticky note = the gap) and 13→14 (limits → conviction = honest → yours)
-- **Visual progression**: cool/flat opening → warm/deep middle → cool/still resolution
-- **Text overlays** at 5 key moments: "The Amnesia Problem", "Five Memory Systems", "Skills = Markdown", "Disposable → Accumulative", "The agent is yours."
-- **Varied Ken Burns**: zoom-in, zoom-out, diagonal pan, horizontal pan, near-still, vertical pan
-- **Varied transitions**: 4 hard cuts, 8 crossfades, 3 long dissolves
-
-### Reproduce
+### Reproduce v3
 
 ```bash
-# 1. Generate TTS from script
-nix-shell -p python3 ffmpeg --run "python3 generate_tts.py"
+# 1. Generate images (requires FAL_KEY)
+nix-shell -p python3 curl jq --run "python3 generate_images_v3.py"
 
-# 2. Build the directed video (requires 14 images in img2/ — generate with fal.ai flux/schnell)
-nix-shell -p python3 ffmpeg --run "python3 build_directed.py"
+# 2. Generate TTS (requires Kokoro venv)
+nix-shell -p python3 ffmpeg --run "python3 generate_tts_v3.py"
+
+# 3. Build the video (requires images in img/ and audio/narration.mp3)
+nix-shell -p python3 ffmpeg --run "python3 build_v3.py"
 ```
 
-See `script.md` for the full narration text and `build_directed.py` / `generate_tts.py` for the production pipeline. The original uniform build is preserved as `build_video.py`.
+See `script-v3.md` for the narration, `lookbook-v3.md` for the visual identity, and `build_v3.py` for the production pipeline.
 
 ## Credits
 
-- Presentation style inspired by [Two Minute Papers](https://www.youtube.com/@TwoMinutePapers) by Dr. Károly Zsolnai Féhér
 - Subject: [q15](https://github.com/q15co/q15) by Adriaan van der Bergh
 - Voice: Kokoro-82M (`bm_fable`)
-- Images: fal.ai flux/schnell
-- Directing: video-director skill (Mamet, Lumet, Murch, Block, Eisenstein, Kuleshov)
+- Images: fal.ai flux/dev
+- Production skills: screenwriting, art-direction, video-director
 
 ## License
 
