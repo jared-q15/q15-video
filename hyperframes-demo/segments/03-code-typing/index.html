@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0d1117; }
+body { font-family: "JetBrains Mono", "Courier New", monospace; }
+
+.bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+}
+
+.window {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 1200px; background: #161b22; border-radius: 12px;
+  border: 1px solid #30363d; overflow: hidden;
+}
+
+.titlebar {
+  height: 40px; background: #21262d; display: flex; align-items: center;
+  padding: 0 16px; gap: 8px; border-bottom: 1px solid #30363d;
+}
+
+.dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot.red { background: #ff5f57; }
+.dot.yellow { background: #febc2e; }
+.dot.green { background: #28c840; }
+
+.titlebar-text {
+  font-size: 14px; color: #8b949e; margin-left: 12px; font-family: -apple-system, sans-serif;
+}
+
+.code-area {
+  padding: 32px; font-size: 22px; line-height: 1.8; color: #c9d1d9;
+  min-height: 320px; font-family: "JetBrains Mono", "Courier New", monospace;
+}
+
+.code-line { white-space: pre; }
+
+.kw { color: #ff7b72; }
+.fn { color: #d2a8ff; }
+.str { color: #a5d6ff; }
+.var { color: #79c0ff; }
+.com { color: #8b949e; }
+.num { color: #f0883e; }
+.pun { color: #c9d1d9; }
+
+.cursor {
+  display: inline-block; width: 12px; height: 22px; background: #58a6ff;
+  vertical-align: text-bottom; margin-left: 2px;
+}
+
+.label {
+  position: absolute; top: 80px; left: 80px;
+  font-size: 18px; font-weight: 600; color: #4a9eff;
+  letter-spacing: 4px; text-transform: uppercase; opacity: 0.6;
+  font-family: "Helvetica Neue", sans-serif;
+}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="7" data-width="1920" data-height="1080">
+
+  <div class="bg clip" data-start="0" data-duration="7" data-track-index="0"></div>
+  <div class="label clip" data-start="0" data-duration="7" data-track-index="1">03 — Code Typing Animation</div>
+
+  <div class="window clip" data-start="0.3" data-duration="6.5" data-track-index="2">
+    <div class="titlebar">
+      <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+      <span class="titlebar-text">render.ts</span>
+    </div>
+    <div class="code-area" id="codeArea">
+      <div class="code-line" id="l1"></div>
+      <div class="code-line" id="l2"></div>
+      <div class="code-line" id="l3"></div>
+      <div class="code-line" id="l4"></div>
+      <div class="code-line" id="l5"></div>
+      <div class="code-line" id="l6"></div>
+      <div class="code-line" id="l7"></div>
+      <div class="code-line" id="l8"></div>
+      <span class="cursor" id="cursor"></span>
+    </div>
+  </div>
+
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const lines = [
+  { el: "l1", html: '<span class="com">// Render HyperFrames to MP4</span>' },
+  { el: "l2", html: '<span class="kw">import</span> <span class="pun">{</span> <span class="var">render</span> <span class="pun">}</span> <span class="kw">from</span> <span class="str">"hyperframes"</span><span class="pun">;</span>' },
+  { el: "l3", html: '' },
+  { el: "l4", html: '<span class="kw">const</span> <span class="var">video</span> <span class="pun">=</span> <span class="kw">await</span> <span class="fn">render</span><span class="pun">({</span>' },
+  { el: "l5", html: '  <span class="var">input</span><span class="pun">:</span> <span class="str">"./composition/index.html"</span><span class="pun">,</span>' },
+  { el: "l6", html: '  <span class="var">output</span><span class="pun">:</span> <span class="str">"demo.mp4"</span><span class="pun">,</span>' },
+  { el: "l7", html: '  <span class="var">fps</span><span class="pun">:</span> <span class="num">30</span><span class="pun">,</span> <span class="var">width</span><span class="pun">:</span> <span class="num">1920</span><span class="pun">,</span> <span class="var">height</span><span class="pun">:</span> <span class="num">1080</span>' },
+  { el: "l8", html: '<span class="pun">});</span>' }
+];
+
+const tl = gsap.timeline({ paused: true });
+let delay = 0.5;
+lines.forEach((line, i) => {
+  if (line.html === "") {
+    tl.to("#" + line.el, { duration: 0.15 }, delay);
+    delay += 0.15;
+    return;
+  }
+  tl.set("#" + line.el, { innerHTML: line.html }, delay);
+  delay += 0.35 + (line.html.length > 60 ? 0.2 : 0);
+});
+tl.to("#cursor", { opacity: 0, duration: 0.01 }, delay + 0.3)
+  .to(".window", { scale: 1.02, duration: 0.3, ease: "power2.out" }, delay + 0.3)
+  .to(".window, .label", { opacity: 0, duration: 0.4 }, delay + 0.8);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

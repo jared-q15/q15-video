@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #0a0e1a; }
+body { font-family: "Helvetica Neue", Arial, sans-serif; }
+
+.bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, #1a1a3e 0%, #0a0e1a 80%);
+}
+
+.morph-container {
+  position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center; width: 100%;
+}
+
+.morph-word {
+  font-size: 96px; font-weight: 800; letter-spacing: -2px;
+  opacity: 0; position: absolute; top: 0; left: 50%; transform: translateX(-50%) scale(0.8);
+  white-space: nowrap;
+}
+
+.label {
+  position: absolute; top: 80px; left: 80px;
+  font-size: 18px; font-weight: 600; color: #4a9eff;
+  letter-spacing: 4px; text-transform: uppercase; opacity: 0.6;
+}
+
+.counter {
+  position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+  font-size: 24px; font-weight: 400; color: #7a8ba0; font-family: "Courier New", monospace;
+}
+
+.w1 { color: #3b82f6; }
+.w2 { color: #8b5cf6; }
+.w3 { color: #ec4899; }
+.w4 { color: #f59e0b; }
+.w5 { color: #10b981; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+
+  <div class="bg clip" data-start="0" data-duration="6" data-track-index="0"></div>
+
+  <div class="label clip" data-start="0" data-duration="6" data-track-index="1">02 — Kinetic Typography</div>
+
+  <div class="morph-container clip" data-start="0.3" data-duration="5.5" data-track-index="2">
+    <div class="morph-word w1" id="w1">DESIGN</div>
+    <div class="morph-word w2" id="w2">ANIMATE</div>
+    <div class="morph-word w3" id="w3">RENDER</div>
+    <div class="morph-word w4" id="w4">EXPORT</div>
+    <div class="morph-word w5" id="w5">SHARE</div>
+  </div>
+
+  <div class="counter clip" data-start="0" data-duration="6" data-track-index="3" id="counter">→ design</div>
+
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl
+  .to("#w1", { opacity: 1, scale: 1, duration: 0.4, ease: "power3.out" }, 0.3)
+  .to("#counter", { duration: 0.01, onStart: function(){ document.getElementById("counter").textContent = "→ design"; } }, 0.3)
+  .to("#w1", { opacity: 0, scale: 1.2, y: -30, duration: 0.3, ease: "power2.in" }, 1.2)
+  .to("#w2", { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.4)
+  .to("#counter", { duration: 0.01, onStart: function(){ document.getElementById("counter").textContent = "→ animate"; } }, 1.4)
+  .to("#w2", { opacity: 0, scale: 1.2, y: -30, duration: 0.3, ease: "power2.in" }, 2.3)
+  .to("#w3", { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "power3.out" }, 2.5)
+  .to("#counter", { duration: 0.01, onStart: function(){ document.getElementById("counter").textContent = "→ render"; } }, 2.5)
+  .to("#w3", { opacity: 0, scale: 1.2, y: -30, duration: 0.3, ease: "power2.in" }, 3.4)
+  .to("#w4", { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "power3.out" }, 3.6)
+  .to("#counter", { duration: 0.01, onStart: function(){ document.getElementById("counter").textContent = "→ export"; } }, 3.6)
+  .to("#w4", { opacity: 0, scale: 1.2, y: -30, duration: 0.3, ease: "power2.in" }, 4.5)
+  .to("#w5", { opacity: 1, scale: 1, y: 0, duration: 0.4, ease: "power3.out" }, 4.7)
+  .to("#counter", { duration: 0.01, onStart: function(){ document.getElementById("counter").textContent = "→ share"; } }, 4.7)
+  .to("#w5, .label, .counter", { opacity: 0, duration: 0.4 }, 5.5);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

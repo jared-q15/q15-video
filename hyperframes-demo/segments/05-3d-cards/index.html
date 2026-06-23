@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+body { font-family: "Helvetica Neue", Arial, sans-serif; }
+
+.bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 50% 60%, #1a1a2e 0%, #0a0a0a 70%);
+}
+
+.label {
+  position: absolute; top: 80px; left: 80px;
+  font-size: 18px; font-weight: 600; color: #4a9eff;
+  letter-spacing: 4px; text-transform: uppercase; opacity: 0.6;
+}
+
+.scene-title {
+  position: absolute; top: 140px; left: 50%; transform: translateX(-50%);
+  font-size: 42px; font-weight: 700; color: #e8eef5; text-align: center;
+  opacity: 0;
+}
+
+.scene-sub {
+  position: absolute; top: 200px; left: 50%; transform: translateX(-50%);
+  font-size: 22px; color: #7a8ba0; opacity: 0;
+}
+
+.card-stage {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 1600px; height: 500px;
+  display: flex; justify-content: center; align-items: center;
+  perspective: 1200px;
+}
+
+.card {
+  position: absolute; width: 320px; height: 440px;
+  border-radius: 16px; padding: 32px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  backface-visibility: visible; transform-style: preserve-3d;
+}
+
+.card-num {
+  font-size: 64px; font-weight: 900; opacity: 0.3;
+}
+
+.card-title {
+  font-size: 28px; font-weight: 700; color: #fff;
+}
+
+.card-desc {
+  font-size: 16px; color: rgba(255,255,255,0.7); line-height: 1.5;
+}
+
+.c1 { background: linear-gradient(135deg, #3b82f6, #1e3a5f); }
+.c2 { background: linear-gradient(135deg, #8b5cf6, #4c1d95); }
+.c3 { background: linear-gradient(135deg, #ec4899, #831843); }
+.c4 { background: linear-gradient(135deg, #10b981, #064e3b); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+
+  <div class="bg clip" data-start="0" data-duration="6" data-track-index="0"></div>
+  <div class="label clip" data-start="0" data-duration="6" data-track-index="1">05 — 3D Card Transforms</div>
+
+  <div class="scene-title clip" data-start="0.3" data-duration="5.5" data-track-index="2" id="title">Feature Stack</div>
+  <div class="scene-sub clip" data-start="0.6" data-duration="5" data-track-index="2" id="sub">GSAP-powered 3D transforms</div>
+
+  <div class="card-stage clip" data-start="0.3" data-duration="5.5" data-track-index="3">
+    <div class="card c1" id="card1" style="transform: translateX(-540px) rotateY(25deg) scale(0.7); opacity: 0;">
+      <div>
+        <div class="card-num">01</div>
+        <div class="card-title" style="margin-top: 20px;">HTML Native</div>
+      </div>
+      <div class="card-desc">Write plain HTML + CSS. No React, no build step, no framework lock-in.</div>
+    </div>
+    <div class="card c2" id="card2" style="transform: translateX(-180px) rotateY(15deg) scale(0.85); opacity: 0;">
+      <div>
+        <div class="card-num">02</div>
+        <div class="card-title" style="margin-top: 20px;">GSAP Motion</div>
+      </div>
+      <div class="card-desc">Timeline-based animation with seeking. Frame-perfect export.</div>
+    </div>
+    <div class="card c3" id="card3" style="opacity: 0; transform: scale(0.5);">
+      <div>
+        <div class="card-num">03</div>
+        <div class="card-title" style="margin-top: 20px;">Chromium Render</div>
+      </div>
+      <div class="card-desc">Headless Chromium captures every frame. 1920x1080 at 30fps.</div>
+    </div>
+    <div class="card c4" id="card4" style="transform: translateX(180px) rotateY(-15deg) scale(0.85); opacity: 0;">
+      <div>
+        <div class="card-num">04</div>
+        <div class="card-title" style="margin-top: 20px;">FFmpeg Output</div>
+      </div>
+      <div class="card-desc">Frames → MP4. H.264 + AAC. Ready to publish.</div>
+    </div>
+  </div>
+
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.to("#title", { opacity: 1, duration: 0.4 }, 0.3)
+  .to("#sub", { opacity: 1, duration: 0.4 }, 0.6)
+  .to("#card1", { opacity: 1, duration: 0.5, ease: "power2.out" }, 0.8)
+  .to("#card2", { opacity: 1, duration: 0.5, ease: "power2.out" }, 1.0)
+  .to("#card3", { opacity: 1, scale: 1, duration: 0.6, ease: "back.out(1.2)" }, 1.2)
+  .to("#card4", { opacity: 1, duration: 0.5, ease: "power2.out" }, 1.4)
+  .to("#card1", { x: "-=60", rotationY: 30, duration: 1.5, ease: "sine.inOut" }, 2.5)
+  .to("#card2", { x: "-=30", rotationY: 20, duration: 1.5, ease: "sine.inOut" }, 2.5)
+  .to("#card3", { x: "+=30", rotationY: -10, scale: 1.05, duration: 1.5, ease: "sine.inOut" }, 2.5)
+  .to("#card4", { x: "+=60", rotationY: -20, duration: 1.5, ease: "sine.inOut" }, 2.5)
+  .to("#card1, #card2, #card3, #card4", { opacity: 0, duration: 0.4 }, 5.5)
+  .to(".label, #title, #sub", { opacity: 0, duration: 0.4 }, 5.5);
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>

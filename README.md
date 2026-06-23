@@ -10,6 +10,8 @@ A documentary video about [q15](https://github.com/q15co/q15), the open-source A
 | v2 | `q15-video.mp4` (directed) | 5:09 | 32.6 MB | Reworked with directing principles |
 | **v3** | **`q15-video-v3.mp4`** | **3:12** | **17.9 MB** | **Character-driven story + proxy/prompt injection** |
 | **v3.1** | **`q15-video-v3_1.mp4`** | **4:15** | **23.1 MB** | **Blended: story + full q15 explanation + proxy** |
+| **Hybrid** | **`q15-video-hybrid.mp4`** | **4:15** | **19.5 MB** | **Typst layouts + HyperFrames animations + FAL images** |
+| **HF Demo** | **`hyperframes-demo-reel.mp4`** | **0:40** | **1.5 MB** | **HyperFrames animation showcase (7 techniques)** |
 
 **v3.1 is the current version.** It blends the character-driven story from v3 with the explanatory content from v2. Maya discovers q15, explores its capabilities (memory, skills, subagents, multi-provider), encounters prompt injection, and is saved by the proxy. Produced using the full three-skill stack: screenwriting, art direction, and video directing.
 
@@ -72,6 +74,10 @@ nix-shell -p python3 ffmpeg --run "python3 build_v31.py"
 ```
 
 See `script-v3_1.md` for the narration, `lookbook-v3.md` for the visual identity, and `build_v31.py` for the production pipeline.
+
+## HyperFrames Demo Reel
+
+A standalone showcase of HyperFrames animation techniques: kinetic typography, word morphing, code typing, data visualization, 3D card transforms, particle networks, and a closing card. See [`hyperframes-demo/README.md`](hyperframes-demo/README.md) for details.
 
 ## Credits
 

@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: #000; }
+body { font-family: "Helvetica Neue", Arial, sans-serif; }
+
+.bg {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 50% 50%, #0a1a2e 0%, #000 80%);
+}
+
+.label {
+  position: absolute; top: 80px; left: 80px;
+  font-size: 18px; font-weight: 600; color: #4a9eff;
+  letter-spacing: 4px; text-transform: uppercase; opacity: 0.6;
+}
+
+.particle {
+  position: absolute; width: 8px; height: 8px; border-radius: 50%;
+  opacity: 0; box-shadow: 0 0 12px currentColor;
+}
+
+.center-text {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  text-align: center; z-index: 10;
+}
+
+.ct-title {
+  font-size: 80px; font-weight: 900; color: #e8eef5;
+  opacity: 0; letter-spacing: -2px;
+}
+
+.ct-sub {
+  font-size: 28px; font-weight: 400; color: #7a8ba0;
+  opacity: 0; margin-top: 16px;
+}
+
+.ring {
+  position: absolute; top: 50%; left: 50%;
+  border-radius: 50%; border: 2px solid rgba(59, 130, 246, 0.3);
+  transform: translate(-50%, -50%); opacity: 0;
+}
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="6" data-width="1920" data-height="1080">
+
+  <div class="bg clip" data-start="0" data-duration="6" data-track-index="0"></div>
+  <div class="label clip" data-start="0" data-duration="6" data-track-index="1">06 — Particle Network</div>
+
+  <div class="ring clip" data-start="0.5" data-duration="5" data-track-index="2" id="ring1" style="width: 400px; height: 400px;"></div>
+  <div class="ring clip" data-start="0.7" data-duration="4.8" data-track-index="2" id="ring2" style="width: 600px; height: 600px;"></div>
+  <div class="ring clip" data-start="0.9" data-duration="4.6" data-track-index="2" id="ring3" style="width: 800px; height: 800px;"></div>
+
+  <div class="center-text clip" data-start="1.5" data-duration="4" data-track-index="10">
+    <div class="ct-title" id="ptitle">Agent-Native Video</div>
+    <div class="ct-sub" id="psub">Built for autonomous pipelines</div>
+  </div>
+
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+
+// Generate particles dynamically
+const colors = ['#3b82f6', '#8b5cf6', '#ec4899', '#10b981', '#f59e0b'];
+const particles = [];
+const root = document.getElementById('root');
+for (let i = 0; i < 40; i++) {
+  const p = document.createElement('div');
+  p.className = 'particle clip';
+  p.style.color = colors[i % 5];
+  p.style.background = colors[i % 5];
+  const angle = (i / 40) * Math.PI * 2;
+  const radius = 250 + Math.random() * 300;
+  const startX = 960 + Math.cos(angle) * radius;
+  const startY = 540 + Math.sin(angle) * radius;
+  p.style.left = startX + 'px';
+  p.style.top = startY + 'px';
+  p.setAttribute('data-start', '0.3');
+  p.setAttribute('data-duration', '5.5');
+  p.setAttribute('data-track-index', '3');
+  root.appendChild(p);
+  particles.push({ el: p, angle: angle, radius: radius, baseX: startX, baseY: startY });
+}
+
+tl
+  .to("#ring1", { opacity: 1, scale: 1, duration: 0.6, ease: "power2.out" }, 0.5)
+  .to("#ring2", { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.7)
+  .to("#ring3", { opacity: 1, duration: 0.6, ease: "power2.out" }, 0.9)
+  .to(".particle", { opacity: 0.7, duration: 0.8, stagger: 0.02, ease: "power2.out" }, 0.5)
+  .to("#ptitle", { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }, 1.5)
+  .to("#psub", { opacity: 1, duration: 0.6, ease: "power2.out" }, 2.0);
+
+// Floating motion
+particles.forEach((p, i) => {
+  tl.to(p.el, {
+    x: (Math.random() - 0.5) * 80,
+    y: (Math.random() - 0.5) * 80,
+    duration: 2 + Math.random(),
+    ease: "sine.inOut",
+    repeat: 1,
+    yoyo: true
+  }, 1.5 + i * 0.02);
+});
+
+tl.to("#ring1", { scale: 1.1, opacity: 0, duration: 1 }, 4.5)
+  .to("#ring2", { scale: 1.1, opacity: 0, duration: 1 }, 4.5)
+  .to("#ring3", { scale: 1.1, opacity: 0, duration: 1 }, 4.5)
+  .to(".particle, .center-text, .label", { opacity: 0, duration: 0.4 }, 5.5);
+
+window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
